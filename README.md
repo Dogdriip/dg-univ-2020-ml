@@ -310,3 +310,29 @@ _그런데 지금 보니까 `np.log1p()` 잘 해놓고 예측값에다가 `np.ex
 ### Algorithms
 
 XGB 0.5 + LGB 0.5 w/ GridSearchCV
+
+## v1_2_3
+
+> 결측치를 더 잘 채울 것이다  
+> MissForest를 쓸 건데  
+> 일단 category형 변수로 냅두고 더미 변수를 나중에 만든다
+
+### Preprocessing
+
+결측치들을 단순히 평균/중앙값이 아니라, MissForest 라이브러리를 이용해 채우기로 결정
+
+1. 범주형 Column들의 결측치 처리
+   1. `string`형으로 변환
+   2. 결측치를 `'NaN'` str로 채움
+   3. 다시 `category`형으로 변환
+2. 각 범주형 Column마다 LabelEncoder 준비 후 train, test 각각 transform
+   1. 이 때 train, test에 각각 다른 LabelEncoder를 쓰지 않도록 주의
+   2. transform 후 자료형이 변한다는 말이 있어서 column들을 다시 `category`형으로 변환
+3. MissForest 수행
+4. Categorical column들의 LabelEncoder inverse transform
+
+(TODO: v1_2_3.ipynb 716번 블록부터 코드)
+
+### Algorithms
+
+XGB 0.5 + LGB 0.5 w/ GridSearchCV
