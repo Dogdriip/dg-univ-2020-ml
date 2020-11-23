@@ -145,7 +145,7 @@ memory usage: 588.1+ KB
 - **3 yeartype**
   - 변경 X
 - **4 fuel**
-  - ㅇ
+  - 범주형 one-hot encoding.
 - **5 dist**
   - 중간중간에 `'등록'`이라고 되어 있는 데이터가 있음 (무슨 뜻인지 알아보려 했으나 잘 모르겠음)
   - 형식이 `%d{만|천}{km|ml}` 이므로 전처리 함수 작성하여 수치형으로 변환
@@ -170,7 +170,7 @@ memory usage: 588.1+ KB
 
 ### Algorithms
 
-- XGBoost \* 0.5 + GradientBoost \* 0.5
+XGB \* 0.5 + GB \* 0.5
 
 ```python
 model_xgb = xgb.XGBRegressor(colsample_bytree=0.4603, gamma=0.0468,
@@ -186,4 +186,19 @@ GBoost = GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05,
                                    max_depth=4, max_features='sqrt',
                                    min_samples_leaf=15, min_samples_split=10,
                                    loss='huber', random_state =5)
+```
+
+## v1_1
+
+### Preprocessing
+
+- **1 modelname**
+  - 모델명을 그냥 날렸다
+
+### Algorithms
+
+XGB \* 0.25 + GB \* 0.25 + SVR \* 0.5
+
+```python
+model_svr = SVR(C=1, cache_size=200, coef0=0, degree=3, epsilon=0.0, gamma='auto', kernel='rbf', max_iter=-1, shrinking=True, tol=0.001, verbose=False)
 ```
