@@ -193,7 +193,7 @@ GBoost = GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05,
 ### Preprocessing
 
 - **1 modelname**
-  - 모델명을 그냥 날렸다
+  - 드랍
 
 ### Algorithms
 
@@ -201,4 +201,34 @@ XGB \* 0.25 + GB \* 0.25 + SVR \* 0.5
 
 ```python
 model_svr = SVR(C=1, cache_size=200, coef0=0, degree=3, epsilon=0.0, gamma='auto', kernel='rbf', max_iter=-1, shrinking=True, tol=0.001, verbose=False)
+```
+
+## v1_2
+
+> 피쳐들의 의미도 생각해보자. 전처리를 빡시게 하자.
+
+### Preprocessing
+
+- **2 ym**
+  - 명세를 다시 보니 어차피 `yeartype`에 있는 정보와 동일한 정보였다.
+  - 드랍
+- **4 fuel**
+  - train에만 `수소` 레이블이 딱 하나 있는데, 얘를 `기타`로 집어넣었다.
+- **6 people**
+  - 최대한 살려보려 했으나 결국 드랍
+  - 모델명에서 몇인승인지 정보를 빼올 수 있을까 생각했는데 너무 힘들 것 같았다
+- **10 type**
+  - train에만 3개 존재하는 `RR` 레이블 데이터들은 drop해 버렸다.
+- **11 mission**
+  - 결측치가 많긴 했는데, 다시 들여다보니 `수동`만 기재되어 있었다.
+  - 그럼 기재되지 않은 차들은 다 `자동`이라는 것 아닐까?
+  - 결측치들을 모두 `자동`으로 채우고 범주형 one-hot encoding.
+
+### Algorithms
+
+RFR
+
+```python
+from sklearn.ensemble import RandomForestRegressor
+rfr = RandomForestRegressor(n_estimators=50, random_state=42)
 ```
