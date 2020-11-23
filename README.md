@@ -298,3 +298,15 @@ lgb_params = {
 lgb_model = lgb.LGBMRegressor()
 lgb_estimator = print_best_params(lgb_model, lgb_params)
 ```
+
+## v1_2_2
+
+### Preprocessing
+
+수치형 데이터 중 `yeartype`, `price`가 skew되어 있는 걸 plot으로 확인했다. `np.log1p()`를 적용하고, 결과값에서 반대로 해 주면 될 것 같았다.
+
+_그런데 지금 보니까 `np.log1p()` 잘 해놓고 예측값에다가 `np.exp()`를 했었다. 원래는 `np.expm1()`이 맞다..._
+
+### Algorithms
+
+XGB 0.5 + LGB 0.5 w/ GridSearchCV
