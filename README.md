@@ -170,7 +170,7 @@ memory usage: 588.1+ KB
 
 ### Algorithms
 
-XGB \* 0.5 + GB \* 0.5
+XGB 0.5 + GB 0.5
 
 ```python
 import xgboost as xgb
@@ -198,7 +198,7 @@ GBoost = GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05,
 
 ### Algorithms
 
-XGB \* 0.25 + GB \* 0.25 + SVR \* 0.5
+XGB 0.25 + GB 0.25 + SVR 0.5
 
 ```python
 from sklearn.svm import SVR
@@ -235,4 +235,66 @@ RFR
 from sklearn.ensemble import RandomForestRegressor
 
 rfr = RandomForestRegressor(n_estimators=50, random_state=42)
+```
+
+## v1_2_1
+
+### Preprocessing
+
+- v1_2와 동일
+
+### Algorithms
+
+XGB 0.5 + LGB 0.5 w/ GridSearchCV
+
+```python
+from sklearn.model_selection import KFold, cross_val_score, train_test_split, GridSearchCV
+import xgboost as xgb
+import lightgbm as lgb
+
+def print_best_params(model, params):
+    grid_model = GridSearchCV(
+        model,
+        param_grid = params,
+        cv=5,
+        scoring='neg_mean_squared_error')
+
+    grid_model.fit(X_train, Y_train)
+    rmse = np.sqrt(-1*grid_model.best_score_)
+    print(
+        '{0} 5 CV 시 최적 평균 RMSE 값 {1}, 최적 alpha:{2}'.format(model.__class__.__name__, np.round(rmse, 4), grid_model.best_params_))
+    return grid_model.best_estimator_
+```
+
+```python
+xgb_params ={
+    'learning_rate': [0.05],
+    'max_depth': [5],
+    'subsample': [0.9],
+    'colsample_bytree': [0.5],
+    'silent': [True],
+    'gpu_id':[0] ,
+    'tree_method':['gpu_hist'],
+    'predictor':['gpu_predictor'],
+    'n_estimators':[1000],
+    'refit' : [True]
+}
+
+xgb_model = xgb.XGBRegressor()
+xgb_estimator = print_best_params(xgb_model, xgb_params)
+
+lgb_params = {
+    'objective':['regression'],
+    'num_leave' : [1],
+    'learning_rate' : [0.05],
+    'n_estimators':[1000],
+    'max_bin' : [80],
+    'gpu_id':[0] ,
+    'tree_method':['gpu_hist'],
+    'predictor':['gpu_predictor'],
+    'refit':[True]
+}
+
+lgb_model = lgb.LGBMRegressor()
+lgb_estimator = print_best_params(lgb_model, lgb_params)
 ```
