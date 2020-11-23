@@ -173,15 +173,16 @@ memory usage: 588.1+ KB
 XGB \* 0.5 + GB \* 0.5
 
 ```python
+import xgboost as xgb
+from sklearn.ensemble import GradientBoostingRegressor
+
 model_xgb = xgb.XGBRegressor(colsample_bytree=0.4603, gamma=0.0468,
                              learning_rate=0.05, max_depth=3,
                              min_child_weight=1.7817, n_estimators=2200,
                              reg_alpha=0.4640, reg_lambda=0.8571,
                              subsample=0.5213, silent=1,
                              random_state =7, nthread = -1)
-```
 
-```python
 GBoost = GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05,
                                    max_depth=4, max_features='sqrt',
                                    min_samples_leaf=15, min_samples_split=10,
@@ -200,6 +201,8 @@ GBoost = GradientBoostingRegressor(n_estimators=3000, learning_rate=0.05,
 XGB \* 0.25 + GB \* 0.25 + SVR \* 0.5
 
 ```python
+from sklearn.svm import SVR
+
 model_svr = SVR(C=1, cache_size=200, coef0=0, degree=3, epsilon=0.0, gamma='auto', kernel='rbf', max_iter=-1, shrinking=True, tol=0.001, verbose=False)
 ```
 
@@ -230,5 +233,6 @@ RFR
 
 ```python
 from sklearn.ensemble import RandomForestRegressor
+
 rfr = RandomForestRegressor(n_estimators=50, random_state=42)
 ```
