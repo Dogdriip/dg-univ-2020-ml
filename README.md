@@ -331,8 +331,114 @@ XGB 0.5 + LGB 0.5 w/ GridSearchCV
 3. MissForest 수행
 4. Categorical column들의 LabelEncoder inverse transform
 
-(TODO: v1_2_3.ipynb 716번 블록부터 코드)
+```python
+from sklearn.preprocessing import LabelEncoder
+
+categorical_columns = ['yeartype', 'fuel', 'cylinder', 'type']
+
+for col in categorical_columns:
+  train[col] = train[col].astype('string')
+  test[col] = test[col].astype('string')
+
+for col in categorical_columns:
+  train[col] = train[col].fillna('NaN')
+  test[col] = test[col].fillna('NaN')
+
+for col in categorical_columns:
+  train[col] = train[col].astype('category')
+  test[col] = test[col].astype('category')
+```
+
+```python
+le_yeartype = LabelEncoder()
+le_fuel = LabelEncoder()
+le_cylinder = LabelEncoder()
+le_type = LabelEncoder()
+
+le_yeartype = le_yeartype.fit(train['yeartype'])
+train['yeartype'] = le_yeartype.transform(train['yeartype'])
+test['yeartype'] = le_yeartype.transform(test['yeartype'])
+
+le_fuel = le_fuel.fit(train['fuel'])
+train['fuel'] = le_fuel.transform(train['fuel'])
+test['fuel'] = le_fuel.transform(test['fuel'])
+
+le_cylinder = le_cylinder.fit(train['cylinder'])
+train['cylinder'] = le_cylinder.transform(train['cylinder'])
+test['cylinder'] = le_cylinder.transform(test['cylinder'])
+
+le_type = le_type.fit(train['type'])
+train['type'] = le_type.transform(train['type'])
+test['type'] = le_type.transform(test['type'])
+```
+
+```python
+for col in categorical_columns:
+  train[col] = train[col].astype('category')
+  test[col] = test[col].astype('category')
+
+train_cat_cols = [train.columns.get_loc(col) for col in train.select_dtypes(['category']).columns.tolist()]
+test_cat_cols = [test.columns.get_loc(col) for col in test.select_dtypes(['category']).columns.tolist()]
+```
+
+```python
+train_cols = train.columns.tolist()
+test_cols = test.columns.tolist()
+
+imputer = MissForest(random_state=42)
+
+train_imputed = imputer.fit_transform(train, cat_vars=train_cat_cols)
+test_imputed = imputer.fit_transform(test, cat_vars=test_cat_cols)
+
+train = pd.DataFrame(train_imputed, columns=train_cols)
+test = pd.DataFrame(test_imputed, columns=test_cols)
+```
+
+LabelEncoder inverse transform
+
+```python
+train['yeartype'] = le_yeartype.inverse_transform(train['yeartype'])
+test['yeartype'] = le_yeartype.inverse_transform(train['yeartype'])
+
+le_fuel = le_fuel.fit(train['fuel'])
+train['fuel'] = le_fuel.transform(train['fuel'])
+test['fuel'] = le_fuel.transform(test['fuel'])
+
+le_cylinder = le_cylinder.fit(train['cylinder'])
+train['cylinder'] = le_cylinder.transform(train['cylinder'])
+test['cylinder'] = le_cylinder.transform(test['cylinder'])
+
+le_type = le_type.fit(train['type'])
+train['type'] = le_type.transform(train['type'])
+test['type'] = le_type.transform(test['type'])
+```
 
 ### Algorithms
 
 XGB 0.5 + LGB 0.5 w/ GridSearchCV
+
+## v1_3
+
+> 데이터 정규화!  
+> 모델!
+
+### Preprocessing
+
+`sklearn.preprocessing.MinMaxScaler`를 이용해 모든 값을 0~1 사이의 값으로 변경 (Categorical variables는 이미 one-hot encoding되었기 때문에 영향을 받지 않음)
+
+```python
+from sklearn.preprocessing import MinMaxScaler
+min_max_scaler = MinMaxScaler()
+
+X_train = min_max_scaler.fit_transform(X_train)
+X_test = min_max_scaler.fit_transform(X_test)
+```
+
+### Algorithms
+
+RFR
+
+```python
+rfr = RandomForestRegressor(n_estimators=50, random_state=42)
+rfr.fit(X_train, Y_train)
+```
