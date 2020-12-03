@@ -2,7 +2,7 @@
 
 [https://programmers.co.kr/competitions/581/dg-univ-2020](https://programmers.co.kr/competitions/581/dg-univ-2020)
 
-![](scoreboard_final_blurred.jpg)
+![scoreboard_final_blurred.jpg](https://raw.githubusercontent.com/Dogdriip/dg-univ-2020-ml/main/scoreboard_final_blurred.jpg)
 
 # Contest Review
 
