@@ -6,8 +6,8 @@
 
 # Contest Review
 
-(대회 후기는 블로그에 작성중)
+[https://driip.me/ee8d2e00-3c76-45df-8de4-9dbe34eeda3c](https://driip.me/ee8d2e00-3c76-45df-8de4-9dbe34eeda3c)
 
-# Kernels
+# Kernels / Notebooks
 
-(얘도 블로그에 작성 중)
+[https://driip.me/3a7b273e-3883-4b0b-9804-0da3501cc688](https://driip.me/3a7b273e-3883-4b0b-9804-0da3501cc688)
