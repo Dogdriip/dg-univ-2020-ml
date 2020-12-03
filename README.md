@@ -417,6 +417,49 @@ test['type'] = le_type.transform(test['type'])
 
 XGB 0.5 + LGB 0.5 w/ GridSearchCV
 
+## v1_2_3_1
+
+### Preprocessing
+
+기통, 구동방식의 결측치를 train, test에서의 각각 등장 확률로 랜덤 분포해서 채웠다.
+
+```python
+import random
+random.seed(42)
+
+tmp = [3.0, 4.0, 5.0, 6.0, 8.0]
+
+for i, j in enumerate(train_cylinder):
+  if not (j in tmp):
+    draw = random.choices(
+      population=[3.0, 4.0, 5.0, 6.0, 8.0],
+      weights=[0.034157532500637265,
+               0.4776106721046818,
+               0.003823604384399694,
+               0.2089387373608633,
+               0.014529696660718837],
+      k=1)
+
+    train_cylinder[i] = draw[0]
+
+for i, j in enumerate(test_cylinder):
+  if not (j in tmp):
+    draw = random.choices(
+      population=[3.0, 4.0, 5.0, 6.0, 8.0],
+      weights=[0.014699634633358823,
+               0.23340980542102133,
+               0.0032288214801597416,
+               0.10383210128303169,
+               0.008072053700399354],
+      k=1)
+
+    test_cylinder[i] = draw[0]
+```
+
+나머지 수치형 결측치들은 그대로 MissForest를 사용했다.
+
+### Algorithms
+
 ## v1_3
 
 > 데이터 정규화!  
